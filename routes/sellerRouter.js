@@ -1,8 +1,13 @@
 const express = require("express");
-const { registerSeller } = require("../controller/sellerController");
+const {
+  registerSeller,
+  getSeller,
+  loginSeller,
+} = require("../controller/sellerController");
 
 const sellerRouter = express.Router();
 
-sellerRouter.post("/register", registerSeller);
+sellerRouter.route("/register").post(registerSeller).get(getSeller);
+sellerRouter.route("/login").post(loginSeller);
 
 module.exports = sellerRouter;

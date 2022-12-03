@@ -52,23 +52,6 @@ const productSchema = mongoose.Schema(
     ratings: {
       type: [],
     },
-    reviews: {
-      type: {
-        user: {
-          type: mongoose.Schema.Types.ObjectId,
-          required: true,
-          ref: "User",
-        },
-        rating: {
-          type: Number,
-          required: [true, "Rating is required to post review"],
-        },
-        review: {
-          type: String,
-          require: [true, "Review cannot be empty"],
-        },
-      },
-    },
     discount: {
       type: Boolean,
       default: false,
