@@ -7,12 +7,13 @@ const productSchema = mongoose.Schema(
       required: [true, "Seller id is missing"],
       ref: "Seller",
     },
-    manufactuer: {
+    manufacturer: {
       type: String,
       required: [true, "Manufacturer is required"],
     },
     importer: {
       type: String,
+      default: "Default importer here",
     },
     packer: {
       type: String,
@@ -32,14 +33,16 @@ const productSchema = mongoose.Schema(
     },
     gender: {
       type: String,
-      enum: ["Male", "Female"],
+      required: [true, "If gender not specified choose Others"],
+      enum: ["male", "female", "others"],
+      default: "Others",
     },
     isKids: {
       type: Boolean,
       default: false,
     },
-    color: {
-      type: String,
+    colors: {
+      type: Array,
       required: [true, "Color is reaquired"],
     },
     price: {
@@ -47,10 +50,7 @@ const productSchema = mongoose.Schema(
       required: [true, "Price is required"],
     },
     size: {
-      type: [],
-    },
-    ratings: {
-      type: [],
+      type: Array,
     },
     discount: {
       type: Boolean,
@@ -67,4 +67,4 @@ const productSchema = mongoose.Schema(
   }
 );
 
-export default mongoose.model("Product", productSchema);
+module.exports = mongoose.model("Product", productSchema);
