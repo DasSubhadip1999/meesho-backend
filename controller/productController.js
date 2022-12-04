@@ -66,6 +66,19 @@ const addProduct = asyncHandler(async (req, res) => {
   }
 });
 
+//get all products
+const getProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find();
+  if (!products) {
+    res.status(500);
+    throw new Error("Couldn't get the products");
+  } else {
+    res.status(200);
+    res.json(products);
+  }
+});
+
 module.exports = {
   addProduct,
+  getProducts,
 };

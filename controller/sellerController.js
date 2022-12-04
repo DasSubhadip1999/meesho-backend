@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 const Seller = require("../models/sellerModel");
 
 const registerSeller = asyncHandler(async (req, res) => {
@@ -18,6 +19,35 @@ const registerSeller = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Seller already exists");
   }
+
+  //verify the email is original
+  // let transporter = nodemailer.createTransport({
+  //   host: "smtp.mail.mail.com",
+  //   port: 465,
+  //   service: "mail",
+  //   secure: true, // true for 465, false for other ports
+  //   auth: {
+  //     user: "meesho.query@mail.com", // generated ethereal user
+  //     pass: "Subha@123@meesho", // generated ethereal password
+  //   },
+  //   logger: true,
+  // });
+
+  // const mail = {
+  //   from: "meesho.query@mail.com",
+  //   to: email,
+  //   subject: "Testing mail",
+  //   text: "Main text body",
+  // };
+
+  // const response = await transporter.sendMail(mail);
+
+  // if (!response) {
+  //   res.status(400);
+  //   throw new Error("Could not send mail");
+  // } else {
+  //   console.log(response);
+  // }
 
   //hashing the password
   const salt = await bcrypt.genSalt(10);
