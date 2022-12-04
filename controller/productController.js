@@ -68,7 +68,20 @@ const addProduct = asyncHandler(async (req, res) => {
 
 //get all products
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find();
+  const queryParams = req.query;
+  let products;
+  if (Object.keys(queryParams).length !== 0) {
+    if (Number(queryParams.s.split("")[0]) % 1 === 0) {
+      products = await Product.findById(queryParams.s);
+    } else {
+      products = await Product.find({
+        name: { $regex: queryParams.s, $options: "i" },
+      });
+    }
+  } else {
+    products = await Product.find();
+  }
+
   if (!products) {
     res.status(500);
     throw new Error("Couldn't get the products");
