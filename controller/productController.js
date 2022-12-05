@@ -3,7 +3,7 @@ const Seller = require("../models/sellerModel");
 const Product = require("../models/productModel");
 const fs = require("fs");
 
-//Add prducts Methode POST
+//Add prducts Method POST
 //@access private
 //route api/products/add
 
@@ -80,7 +80,7 @@ const addProduct = asyncHandler(async (req, res) => {
   }
 });
 
-//Get prducts Methode GET
+//Get prducts Method GET
 //@access public
 //route api/products/get
 const getProducts = asyncHandler(async (req, res) => {
@@ -107,7 +107,22 @@ const getProducts = asyncHandler(async (req, res) => {
   }
 });
 
-//delete single prduct Methode DELETE
+//get single product Methode GET
+//@access public
+//@route api/products/get/:id
+const getSingleProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+
+  if (!product) {
+    res.status(400);
+    throw new Error("Product not found");
+  } else {
+    res.status(200);
+    res.json(product);
+  }
+});
+
+//delete single prduct Method DELETE
 //@access private
 //@route api/products/delete/:id
 const deleteProduct = asyncHandler(async (req, res) => {
@@ -148,5 +163,6 @@ const deleteProduct = asyncHandler(async (req, res) => {
 module.exports = {
   addProduct,
   getProducts,
+  getSingleProduct,
   deleteProduct,
 };
