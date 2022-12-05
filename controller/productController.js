@@ -2,6 +2,10 @@ const asyncHandler = require("express-async-handler");
 const Seller = require("../models/sellerModel");
 const Product = require("../models/productModel");
 
+//Add prducts Methode POST
+//@access private
+//route api/products/add
+
 const addProduct = asyncHandler(async (req, res) => {
   const {
     manufacturer,
@@ -32,6 +36,14 @@ const addProduct = asyncHandler(async (req, res) => {
     throw new Error("* fields are required");
   }
 
+  let images;
+  if (req.files) {
+    images = req.files.map((image) => image.path);
+  } else {
+    res.status(400);
+    throw new Error("Please select product image");
+  }
+
   //get the seller from DB
   const seller = await Seller.findById(req.seller.id);
   if (!seller) {
@@ -53,6 +65,7 @@ const addProduct = asyncHandler(async (req, res) => {
     gender,
     isKids,
     colors,
+    images,
     price,
     size,
     discount,
@@ -66,7 +79,9 @@ const addProduct = asyncHandler(async (req, res) => {
   }
 });
 
-//get all products
+//Get prducts Methode GET
+//@access public
+//route api/products/get
 const getProducts = asyncHandler(async (req, res) => {
   const queryParams = req.query;
   let products;
@@ -90,6 +105,11 @@ const getProducts = asyncHandler(async (req, res) => {
     res.json(products);
   }
 });
+
+//delete single prduct Methode DELETE
+//@access private
+//@route api/products/delete/:id
+const deleteProduct = asyncHandler(async (req, res) => {});
 
 module.exports = {
   addProduct,

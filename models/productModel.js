@@ -45,6 +45,10 @@ const productSchema = mongoose.Schema(
       type: Array,
       required: [true, "Color is reaquired"],
     },
+    images: {
+      type: Array,
+      required: [true, "At least one image needed"],
+    },
     price: {
       type: Number,
       required: [true, "Price is required"],
