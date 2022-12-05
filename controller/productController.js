@@ -53,6 +53,7 @@ const addProduct = asyncHandler(async (req, res) => {
   }
 
   const colors = color.split(",");
+  const sizes = size ? size.split(",") : [];
 
   //add product to DB
   const product = await Product.create({
@@ -68,7 +69,7 @@ const addProduct = asyncHandler(async (req, res) => {
     colors,
     images,
     price,
-    size,
+    sizes,
     discount,
   });
 

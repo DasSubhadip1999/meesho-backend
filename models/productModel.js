@@ -53,7 +53,7 @@ const productSchema = mongoose.Schema(
       type: Number,
       required: [true, "Price is required"],
     },
-    size: {
+    sizes: {
       type: Array,
     },
     discount: {
