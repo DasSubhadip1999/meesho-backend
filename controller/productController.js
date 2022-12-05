@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Seller = require("../models/sellerModel");
 const Product = require("../models/productModel");
+const fs = require("fs");
 
 //Add prducts Methode POST
 //@access private
@@ -109,9 +110,43 @@ const getProducts = asyncHandler(async (req, res) => {
 //delete single prduct Methode DELETE
 //@access private
 //@route api/products/delete/:id
-const deleteProduct = asyncHandler(async (req, res) => {});
+const deleteProduct = asyncHandler(async (req, res) => {
+  //find the seller who has make request
+  const seller = await Seller.findById(req.seller.id);
+
+  if (!seller) {
+    res.status(400);
+    throw new Error("Seller not found");
+  }
+
+  const product = await Product.findById(req.params.id);
+
+  if (!product) {
+    res.status(400);
+    throw new Error("Product not found");
+  }
+
+  if (product.seller.toString() !== req.seller.id) {
+    res.status(401);
+    throw new Error("Not authorized");
+  }
+
+  product.images.forEach((image) => {
+    fs.unlink(image, function (err) {
+      if (err) {
+        throw new Error(err);
+      } else {
+        console.log("Successfully deleted the file.");
+      }
+    });
+  });
+
+  await product.remove();
+  res.status(200).json({ message: "Product deleted successfully" });
+});
 
 module.exports = {
   addProduct,
   getProducts,
+  deleteProduct,
 };
