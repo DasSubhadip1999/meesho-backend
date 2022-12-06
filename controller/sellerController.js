@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const Seller = require("../models/sellerModel");
+const Product = require("../models/productModel");
 
 const registerSeller = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -113,8 +114,33 @@ const getSeller = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "work" });
 });
 
+//get sellers individual product.
+//@medthod GET
+//@route api/sellers/get-products
+//@acces private
+const getSellersProduct = asyncHandler(async (req, res) => {
+  //get seller who has login
+  const seller = await Seller.findById(req.seller.id);
+
+  if (!seller) {
+    res.status(400);
+    throw new Error("No seller found");
+  }
+
+  //get all products that are added by current seller
+  const products = await Product.find({ seller: seller._id });
+
+  if (!products) {
+    res.status(400);
+    throw new Error("No products available for this seller");
+  } else {
+    res.status(200).json(products);
+  }
+});
+
 module.exports = {
   registerSeller,
   loginSeller,
   getSeller,
+  getSellersProduct,
 };
