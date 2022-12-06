@@ -29,7 +29,7 @@ const addToCart = asyncHandler(async (req, res) => {
 });
 
 //@desc get added products to cart
-//@route api/products/get/cart-products
+//@route api/products/cart-products
 //@access private
 const getCartProducts = asyncHandler(async (req, res) => {
   //get the user
@@ -50,7 +50,37 @@ const getCartProducts = asyncHandler(async (req, res) => {
   res.status(200).json(products);
 });
 
+//@desc delete a single cart product
+//@router api/products/get/:id/delete-cart-product
+//@access private
+const deleteCartProduct = asyncHandler(async (req, res) => {
+  //get the user
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    res.status(400);
+    throw new Error("User not found");
+  }
+
+  const product = await Cart.findOne({ product: req.params.id });
+
+  if (!product) {
+    res.status(400);
+    throw new Error("Product not found");
+  }
+
+  if (product.user.toString() !== req.user.id) {
+    res.status(400);
+    throw new Error("Delete not authorized");
+  }
+
+  await product.remove();
+
+  res.status(200).json({ message: "Cart item removed successfully" });
+});
+
 module.exports = {
   addToCart,
   getCartProducts,
+  deleteCartProduct,
 };
