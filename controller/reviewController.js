@@ -85,7 +85,7 @@ const getSingleReview = asyncHandler(async (req, res) => {
 });
 
 //delete a single review
-//@router api/products/get/:id/reviews/by-user
+//@router api/products/get/:id/reviews/:reviewId
 const deleteReview = asyncHandler(async (req, res) => {
   //get the user
   const user = await User.findById(req.user.id);
@@ -103,6 +103,10 @@ const deleteReview = asyncHandler(async (req, res) => {
     throw new Error("Review not found");
   }
 
+  if (user._id.toString() !== review.user.toString()) {
+    res.status(400);
+    throw new Error("Not authorized to delete");
+  }
   await review.remove();
 
   res.status(200).json({ message: "Review deleted successfully" });

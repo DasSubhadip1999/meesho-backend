@@ -144,7 +144,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
   if (product.seller.toString() !== req.seller.id) {
     res.status(401);
-    throw new Error("Not authorized");
+    throw new Error("Not authorized to delete");
   }
 
   product.images.forEach((image) => {
