@@ -7,8 +7,12 @@ const {
 } = require("../controller/productController");
 const { protectSeller } = require("../middleware/authMiddleware");
 const upload = require("../middleware/uploadMiddleware");
+const reviewRouter = require("./reviewRouter");
 
 const productRouter = express.Router();
+
+//re routing for review router
+productRouter.use("/get/:id/reviews", reviewRouter);
 
 productRouter
   .route("/add")
