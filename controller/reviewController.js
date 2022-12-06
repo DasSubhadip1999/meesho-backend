@@ -85,10 +85,32 @@ const getSingleReview = asyncHandler(async (req, res) => {
 });
 
 //delete a single review
-//@router api/products
+//@router api/products/get/:id/reviews/by-user
+const deleteReview = asyncHandler(async (req, res) => {
+  //get the user
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    res.status(400);
+    throw new Error("User not found");
+  }
+
+  //get the review
+  const review = await Review.findById(req.params.reviewId);
+
+  if (!review) {
+    res.status(200);
+    throw new Error("Review not found");
+  }
+
+  await review.remove();
+
+  res.status(200).json({ message: "Review deleted successfully" });
+});
 
 module.exports = {
   addReview,
   getReviews,
   getSingleReview,
+  deleteReview,
 };
