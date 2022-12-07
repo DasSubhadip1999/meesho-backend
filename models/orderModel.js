@@ -11,6 +11,10 @@ const orderSchema = mongoose.Schema(
       type: [],
       required: [true, "Cart is empty"],
     },
+    deliveryDate: {
+      type: String,
+      required: [true, "Delivery date not added"],
+    },
   },
   {
     timestamps: true,

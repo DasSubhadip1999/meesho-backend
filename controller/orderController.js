@@ -23,9 +23,18 @@ const placeOrder = asyncHandler(async (req, res) => {
     throw new Error("Could not place order cart is empty");
   }
 
+  //set the delivery date
+  let today = new Date();
+  let day = today.getDate() + 6;
+  let month = today.getMonth() + 1;
+  let year = today.getFullYear();
+
+  let deliveryDate = new Date(`${month}-${day}-${year}`);
+
   const orderItems = await orderModel.create({
     user: req.user.id,
     cart: cartItems,
+    deliveryDate,
   });
 
   if (!orderItems) {
@@ -39,7 +48,28 @@ const placeOrder = asyncHandler(async (req, res) => {
 });
 
 //get the order items
+const getOrders = asyncHandler(async (req, res) => {
+  //get the user
+  const user = await userModel.findById(req.user.id);
+
+  if (!user) {
+    res.status(400);
+    throw new Error("User not found");
+  }
+
+  //get the orders or current user
+
+  const orders = await orderModel.find({ user: req.user.id });
+
+  if (!orders) {
+    res.status(404);
+    throw new Error("Orders not found");
+  }
+
+  res.status(200).json(orders);
+});
 
 module.exports = {
   placeOrder,
+  getOrders,
 };
