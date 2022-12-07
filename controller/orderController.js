@@ -47,7 +47,10 @@ const placeOrder = asyncHandler(async (req, res) => {
     .json({ message: "Order placed successfully", order: orderItems });
 });
 
-//get the order items
+//@desc get the order items of current user
+//@route api/orders/my-orders
+//@access private
+
 const getOrders = asyncHandler(async (req, res) => {
   //get the user
   const user = await userModel.findById(req.user.id);
