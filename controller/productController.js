@@ -85,16 +85,18 @@ const addProduct = asyncHandler(async (req, res) => {
 //@access public
 //route api/products/get
 const getProducts = asyncHandler(async (req, res) => {
-  const queryParams = req.query;
+  const { search, limit } = req.query;
   let products;
-  if (Object.keys(queryParams).length !== 0) {
-    if (Number(queryParams.s.split("")[0]) % 1 === 0) {
-      products = await Product.findById(queryParams.s);
+  if (search) {
+    if (Number(search.split("")[0]) % 1 === 0) {
+      products = await Product.findById(search);
     } else {
       products = await Product.find({
-        name: { $regex: queryParams.s, $options: "i" },
-      });
+        name: { $regex: search, $options: "i" },
+      }).limit(limit);
     }
+  } else if (limit) {
+    products = await Product.find().limit(limit);
   } else {
     products = await Product.find();
   }
