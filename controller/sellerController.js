@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const Seller = require("../models/sellerModel");
 const Product = require("../models/productModel");
+const SellerFeedback = require("../models/sellerFeedback");
 
 const registerSeller = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -138,9 +139,53 @@ const getSellersProduct = asyncHandler(async (req, res) => {
   }
 });
 
+//getting seller feedback
+const getFeedbacks = asyncHandler(async (req, res) => {
+  //getting seller feedback data
+  const feedback = await SellerFeedback.find();
+
+  if (!feedback) {
+    res.status(500);
+    throw new Error("No feedback available");
+  }
+
+  res.status(200).json(feedback);
+});
+
+//add seller feedback regarding meesho selling experience
+const addFeedback = asyncHandler(async (req, res) => {
+  const { feedback, location } = req.body;
+
+  //get the seller
+  const seller = await Seller.findById(req.seller.id);
+
+  if (!seller) {
+    res.status(200);
+    throw new Error("No Seller Found");
+  }
+
+  let video = req.file.path;
+
+  const feedbackData = await SellerFeedback.create({
+    seller: req.seller.id,
+    feedback,
+    location,
+    video,
+  });
+
+  if (!feedbackData) {
+    res.status(400);
+    throw new Error("Could not add feedback");
+  }
+
+  res.status(200).json(feedbackData);
+});
+
 module.exports = {
   registerSeller,
   loginSeller,
   getSeller,
   getSellersProduct,
+  getFeedbacks,
+  addFeedback,
 };

@@ -6,7 +6,7 @@ const {
   deleteProduct,
 } = require("../controller/productController");
 const { protectSeller, protectUser } = require("../middleware/authMiddleware");
-const upload = require("../middleware/uploadMiddleware");
+const { upload } = require("../middleware/uploadMiddleware");
 const reviewRouter = require("./reviewRouter");
 const cartRouter = require("./cartRouter");
 const { getCartProducts } = require("../controller/cartController");

@@ -6,8 +6,11 @@ const {
   getSeller,
   loginSeller,
   getSellersProduct,
+  getFeedbacks,
+  addFeedback,
 } = require("../controller/sellerController");
 const { protectSeller } = require("../middleware/authMiddleware");
+const { uploadVideo } = require("../middleware/uploadMiddleware");
 const sellerRouter = express.Router();
 //register
 sellerRouter
@@ -35,5 +38,19 @@ sellerRouter
     loginSeller
   );
 sellerRouter.route("/get-products").get(protectSeller, getSellersProduct);
+sellerRouter
+  .route("/feedbacks")
+  .get(getFeedbacks)
+  .post(
+    body("location")
+      .exists({ checkFalsy: true })
+      .withMessage("Location is required to add feedback"),
+    body("feedback")
+      .isLength({ min: 20 })
+      .withMessage("Feedback should have minimum length 20"),
+    protectSeller,
+    uploadVideo.single("video"),
+    addFeedback
+  );
 
 module.exports = sellerRouter;
