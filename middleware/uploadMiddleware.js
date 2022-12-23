@@ -6,6 +6,7 @@ const Storage = multer.diskStorage({
     cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
+    console.log("multer", file);
     let ext = path.extname(file.originalname);
     cb(null, Date.now() + ext);
   },
@@ -24,11 +25,15 @@ const VideoStorage = multer.diskStorage({
 const upload = multer({
   storage: Storage,
   fileFilter: (req, file, cb) => {
-    if (file.mimetype === "image/png" || file.mimetype === "image/jpg") {
+    if (
+      file.mimetype === "image/png" ||
+      file.mimetype === "image/jpg" ||
+      file.mimetype === "image/jpeg"
+    ) {
       cb(null, true);
     } else {
-      console.log("Only jpg and png support");
       cb(null, false);
+      cb(new Error("Only JPG and PNG supported"));
     }
   },
   limits: {
@@ -42,8 +47,8 @@ const uploadVideo = multer({
     if (file.mimetype === "video/mp4") {
       cb(null, true);
     } else {
-      console.log("Only mp4 formal supported");
       cb(null, false);
+      cb(null, new Error("Only mp4 format supported"));
     }
   },
   limits: {

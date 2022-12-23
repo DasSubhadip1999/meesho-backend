@@ -142,7 +142,7 @@ const getSellersProduct = asyncHandler(async (req, res) => {
 //getting seller feedback
 const getFeedbacks = asyncHandler(async (req, res) => {
   //getting seller feedback data
-  const feedback = await SellerFeedback.find();
+  const feedback = await SellerFeedback.find().populate("seller");
 
   if (!feedback) {
     res.status(500);

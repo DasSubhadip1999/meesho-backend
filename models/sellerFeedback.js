@@ -4,6 +4,7 @@ const sellerFeedbackSchema = mongoose.Schema({
   seller: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
+    ref: "Seller",
   },
   video: {
     type: String,

@@ -35,7 +35,7 @@ const productSchema = mongoose.Schema(
       type: String,
       required: [true, "If gender not specified choose Others"],
       enum: ["male", "female", "others"],
-      default: "Others",
+      default: "others",
     },
     isKids: {
       type: Boolean,
@@ -57,8 +57,12 @@ const productSchema = mongoose.Schema(
       type: Array,
     },
     discount: {
-      type: Boolean,
-      default: false,
+      type: Number,
+      default: 0,
+    },
+    discountedPrince: {
+      type: Number,
+      default: 0,
     },
     legalDescription: {
       type: String,

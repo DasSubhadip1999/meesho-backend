@@ -8,6 +8,7 @@ const fs = require("fs");
 //route api/products/add
 
 const addProduct = asyncHandler(async (req, res) => {
+  console.log("req.body", req.body);
   const {
     manufacturer,
     importer,
@@ -21,6 +22,7 @@ const addProduct = asyncHandler(async (req, res) => {
     price,
     size,
     discount,
+    discountedPrice,
   } = req.body;
 
   //form validation
@@ -38,7 +40,9 @@ const addProduct = asyncHandler(async (req, res) => {
   }
 
   let images;
+  console.log("req.files", req.files);
   if (req.files) {
+    console.log("controller", req.files);
     images = req.files.map((image) => image.path);
   } else {
     res.status(400);
@@ -71,6 +75,7 @@ const addProduct = asyncHandler(async (req, res) => {
     price,
     sizes,
     discount,
+    discountedPrice,
   });
 
   if (!product) {
