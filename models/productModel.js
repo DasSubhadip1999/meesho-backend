@@ -57,10 +57,10 @@ const productSchema = mongoose.Schema(
       type: Array,
     },
     discount: {
-      type: Number,
-      default: 0,
+      type: String,
+      default: "0",
     },
-    discountedPrince: {
+    discountedPrice: {
       type: Number,
       default: 0,
     },

@@ -8,7 +8,7 @@ const fs = require("fs");
 //route api/products/add
 
 const addProduct = asyncHandler(async (req, res) => {
-  console.log("req.body", req.body);
+  //console.log("req.body", req.body);
   const {
     manufacturer,
     importer,
@@ -24,7 +24,7 @@ const addProduct = asyncHandler(async (req, res) => {
     discount,
     discountedPrice,
   } = req.body;
-
+  console.log("discountedPrice", discountedPrice);
   //form validation
   if (
     !manufacturer ||
@@ -40,15 +40,17 @@ const addProduct = asyncHandler(async (req, res) => {
   }
 
   let images;
-  console.log("req.files", req.files);
+  //console.log("req.files", req.files);
   if (req.files) {
-    console.log("controller", req.files);
+    //console.log("controller", req.files);
     images = req.files.map((image) => image.path);
   } else {
     res.status(400);
     throw new Error("Please select product image");
   }
 
+  //console.log("images", images);
+  //console.log("req.body", req.body);
   //get the seller from DB
   const seller = await Seller.findById(req.seller.id);
   if (!seller) {
@@ -119,7 +121,7 @@ const getProducts = asyncHandler(async (req, res) => {
 //@access public
 //@route api/products/get/:id
 const getSingleProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const product = await Product.findById(req.params.id).populate("seller");
 
   if (!product) {
     res.status(400);

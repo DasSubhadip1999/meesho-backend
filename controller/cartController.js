@@ -4,9 +4,17 @@ const Cart = require("../models/cartModel");
 const User = require("../models/userModel");
 
 //@desc add a product to cart collection with current user
-//@router api/products/get/:id/add-to-cart
+//@route api/products/get/:id/add-to-cart
 //@access private
 const addToCart = asyncHandler(async (req, res) => {
+  //check the user;
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    res.status(400);
+    throw new Error("User not found");
+  }
+
   //check the product
   const product = await Product.findById(req.params.id);
 
@@ -62,7 +70,7 @@ const deleteCartProduct = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  const product = await Cart.findOne({ product: req.params.id });
+  const product = await Cart.findById(req.params.id);
 
   if (!product) {
     res.status(400);

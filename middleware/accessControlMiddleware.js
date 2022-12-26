@@ -4,7 +4,10 @@ const accessControl = (req, res, next) => {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
   next();
 };
 
 module.exports = accessControl;
+
+//"Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE"
