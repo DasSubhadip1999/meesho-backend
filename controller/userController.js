@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
+const Address = require("../models/addressModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -77,7 +78,50 @@ const genToken = (id) => {
   });
 };
 
+//@desc add delivery address
+//@acess private
+//route /api/users/delivery-address/add
+const addAddress = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    res.status(400);
+    throw new Error("User not found");
+  }
+
+  const {
+    addressName,
+    phoneNumber,
+    houseNo,
+    area,
+    pincode,
+    city,
+    state,
+    nearByLocation,
+  } = req.body;
+
+  const address = await Address.create({
+    user: req.user.id,
+    addressName,
+    phoneNumber,
+    houseNo,
+    area,
+    pincode,
+    city,
+    state,
+    nearByLocation,
+  });
+
+  if (!address) {
+    res.status(400);
+    throw new Error("Couldn't create address");
+  }
+
+  res.status(200).json(address);
+});
+
 module.exports = {
   registerUser,
   loginUser,
+  addAddress,
 };

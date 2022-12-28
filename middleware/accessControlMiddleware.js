@@ -9,5 +9,3 @@ const accessControl = (req, res, next) => {
 };
 
 module.exports = accessControl;
-
-//"Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE"

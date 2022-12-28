@@ -1,7 +1,12 @@
 const express = require("express");
-const { registerUser, loginUser } = require("../controller/userController");
+const {
+  registerUser,
+  loginUser,
+  addAddress,
+} = require("../controller/userController");
 const { body } = require("express-validator");
 const { validator } = require("../middleware/validateMiddleware");
+const { protectUser } = require("../middleware/authMiddleware");
 
 const userRouter = express.Router();
 
@@ -25,6 +30,29 @@ userRouter
       .withMessage("Password should have minimum length six"),
     validator,
     loginUser
+  );
+
+userRouter
+  .route("/delivery-address/add")
+  .post(
+    body("addressName")
+      .exists({ checkFalsy: true })
+      .withMessage("Name can't be empty"),
+    body("phoneNumber")
+      .isLength({ min: 10 })
+      .withMessage("Enter a valid mobile number"),
+    body("houseNo")
+      .exists({ checkFalsy: true })
+      .withMessage("House no. /building name required"),
+    body("area").exists({ checkFalsy: true }).withMessage("Area is required"),
+    body("pincode")
+      .exists({ checkFalsy: true })
+      .withMessage("Pin Code required"),
+    body("city").exists({ checkFalsy: true }).withMessage("City is required"),
+    body("state").exists({ checkFalsy: true }).withMessage("State is required"),
+    validator,
+    protectUser,
+    addAddress
   );
 
 module.exports = userRouter;
