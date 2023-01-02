@@ -82,13 +82,39 @@ const deleteCartProduct = asyncHandler(async (req, res) => {
     throw new Error("Delete not authorized");
   }
 
-  await product.remove();
+  try {
+    await product.remove();
 
-  res.status(200).json({ message: "Cart item removed successfully" });
+    res.status(200).json({ message: "Cart item removed successfully" });
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  }
+});
+
+//@desc delete all cart products
+//@router api/products/get/:id/
+
+const deleteAllCartProducts = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  try {
+    await Cart.deleteMany({ user: req.user.id });
+    res.status(200).json({ message: "All cart products of user are removed" });
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  }
 });
 
 module.exports = {
   addToCart,
   getCartProducts,
   deleteCartProduct,
+  deleteAllCartProducts,
 };

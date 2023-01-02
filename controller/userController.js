@@ -117,11 +117,32 @@ const addAddress = asyncHandler(async (req, res) => {
     throw new Error("Couldn't create address");
   }
 
-  res.status(200).json(address);
+  res.status(201).json(address);
+});
+
+const getAddress = asyncHandler(async (req, res) => {
+  const user = User.findById(req.user.id);
+
+  if (!user) {
+    res.status(400);
+    throw new Error("User not found");
+  }
+
+  const addresses = await Address.find({ user: req.user.id });
+
+  if (!addresses) {
+    res.status(400);
+    throw new Error("No Address found");
+  }
+
+  //console.log(addresses);
+
+  res.status(200).json(addresses);
 });
 
 module.exports = {
   registerUser,
   loginUser,
   addAddress,
+  getAddress,
 };

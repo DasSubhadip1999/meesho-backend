@@ -3,6 +3,7 @@ const {
   registerUser,
   loginUser,
   addAddress,
+  getAddress,
 } = require("../controller/userController");
 const { body } = require("express-validator");
 const { validator } = require("../middleware/validateMiddleware");
@@ -54,5 +55,7 @@ userRouter
     protectUser,
     addAddress
   );
+
+userRouter.route("/delivery-address/get").get(protectUser, getAddress);
 
 module.exports = userRouter;
