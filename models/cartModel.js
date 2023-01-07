@@ -12,6 +12,19 @@ const cartSchema = mongoose.Schema(
       required: [true, "Product id is required"],
       ref: "Product",
     },
+    userSelection: {
+      size: {
+        type: String,
+      },
+      buyingPrice: {
+        type: Number,
+        required: true,
+      },
+      returnType: {
+        type: String,
+        required: true,
+      },
+    },
   },
   {
     timestamps: true,

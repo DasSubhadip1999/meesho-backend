@@ -15,6 +15,8 @@ const addToCart = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
+  const { size, buyingPrice, returnType } = req.body;
+
   //check the product
   const product = await Product.findById(req.params.id);
 
@@ -26,6 +28,11 @@ const addToCart = asyncHandler(async (req, res) => {
   const cartItem = await Cart.create({
     user: req.user.id,
     product: req.params.id,
+    userSelection: {
+      size,
+      buyingPrice,
+      returnType,
+    },
   });
 
   if (!cartItem) {

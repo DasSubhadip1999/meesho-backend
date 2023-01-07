@@ -91,12 +91,15 @@ const addProduct = asyncHandler(async (req, res) => {
 //Get prducts Method GET
 //@access public
 //route api/products/get
+//route for searching api/products/get?search=text&limit=5
 const getProducts = asyncHandler(async (req, res) => {
   const { search, limit } = req.query;
+
   let products;
   if (search) {
     if (Number(search.split("")[0]) % 1 === 0) {
-      products = await Product.findById(search);
+      const product = await Product.findById(search);
+      products = [product];
     } else {
       products = await Product.find({
         name: { $regex: search, $options: "i" },
@@ -105,15 +108,17 @@ const getProducts = asyncHandler(async (req, res) => {
   } else if (limit) {
     products = await Product.find().limit(limit);
   } else {
-    products = await Product.find();
+    products = await Product.find().populate("seller", "-password");
   }
 
   if (!products) {
     res.status(500);
     throw new Error("Couldn't get the products");
+  } else if (products.length === 0) {
+    res.status(400);
+    throw new Error("Product not found");
   } else {
-    res.status(200);
-    res.json(products);
+    res.status(200).json(products);
   }
 });
 
@@ -121,7 +126,10 @@ const getProducts = asyncHandler(async (req, res) => {
 //@access public
 //@route api/products/get/:id
 const getSingleProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id).populate("seller");
+  const product = await Product.findById(req.params.id).populate(
+    "seller",
+    "-password"
+  );
 
   if (!product) {
     res.status(400);
