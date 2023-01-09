@@ -23,6 +23,13 @@ const placeOrder = asyncHandler(async (req, res) => {
     throw new Error("Could not place order cart is empty");
   }
 
+  const orders = cartItems.map((cartItem) => {
+    return {
+      product: cartItem.product,
+      userOrder: cartItem.userSelection,
+    };
+  });
+
   //set the delivery date
   let today = new Date();
   let day = today.getDate() + 6;
@@ -33,7 +40,7 @@ const placeOrder = asyncHandler(async (req, res) => {
 
   const orderItems = await orderModel.create({
     user: req.user.id,
-    cart: cartItems,
+    orders,
     deliveryDate,
   });
 
@@ -62,7 +69,9 @@ const getOrders = asyncHandler(async (req, res) => {
 
   //get the orders or current user
 
-  const orders = await orderModel.find({ user: req.user.id });
+  const orders = await orderModel
+    .find({ user: req.user.id })
+    .populate({ path: "orders", populate: "product" });
 
   if (!orders) {
     res.status(404);

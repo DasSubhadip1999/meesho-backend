@@ -7,9 +7,23 @@ const orderSchema = mongoose.Schema(
       required: [true, "User is required"],
       ref: "User",
     },
-    cart: {
-      type: [],
-      required: [true, "Cart is empty"],
+    orders: [
+      {
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: [true, "Product is required"],
+          ref: "Product",
+        },
+        userOrder: {
+          type: Object,
+          required: true,
+        },
+      },
+    ],
+    deliveryAddress: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: false,
+      ref: "Address",
     },
     deliveryDate: {
       type: String,
