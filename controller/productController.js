@@ -93,7 +93,7 @@ const addProduct = asyncHandler(async (req, res) => {
 //route api/products/get
 //route for searching api/products/get?search=text&limit=5
 const getProducts = asyncHandler(async (req, res) => {
-  const { search, limit } = req.query;
+  const { search, limit, sort } = req.query;
 
   let products;
   if (search) {
@@ -103,10 +103,21 @@ const getProducts = asyncHandler(async (req, res) => {
     } else {
       products = await Product.find({
         name: { $regex: search, $options: "i" },
-      }).limit(limit);
+      })
+        .limit(limit)
+        .populate("seller", "-password");
     }
   } else if (limit) {
-    products = await Product.find().limit(limit);
+    products = await Product.find()
+      .limit(limit)
+      .populate("seller", "-password");
+  } else if (sort) {
+    if (sort === "new-arrivals") {
+      console.log(sort);
+      products = await Product.find()
+        .sort({ createdAt: "desc" })
+        .populate("seller", "-password");
+    }
   } else {
     products = await Product.find().populate("seller", "-password");
   }
