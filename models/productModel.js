@@ -64,6 +64,10 @@ const productSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    overAllDiscount: {
+      type: Number,
+      default: 0,
+    },
     legalDescription: {
       type: String,
       default:

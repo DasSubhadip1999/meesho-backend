@@ -78,6 +78,7 @@ const addProduct = asyncHandler(async (req, res) => {
     sizes,
     discount,
     discountedPrice,
+    overAllDiscount: price - discountedPrice,
   });
 
   if (!product) {
@@ -113,9 +114,20 @@ const getProducts = asyncHandler(async (req, res) => {
       .populate("seller", "-password");
   } else if (sort) {
     if (sort === "new-arrivals") {
-      console.log(sort);
       products = await Product.find()
         .sort({ createdAt: "desc" })
+        .populate("seller", "-password");
+    } else if (sort === "high-to-low") {
+      products = await Product.find()
+        .sort({ discountedPrice: "desc" })
+        .populate("seller", "-password");
+    } else if (sort === "low-to-high") {
+      products = await Product.find()
+        .sort({ discountedPrice: "asc" })
+        .populate("seller", "-password");
+    } else if (sort === "discount") {
+      products = await Product.find()
+        .sort({ overAllDiscount: "desc" })
         .populate("seller", "-password");
     }
   } else {

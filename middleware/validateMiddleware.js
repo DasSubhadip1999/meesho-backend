@@ -3,7 +3,9 @@ const validator = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400);
-    throw new Error(JSON.stringify(errors.array()));
+    let msg = errors.array().map(({ msg }) => msg);
+
+    throw new Error(JSON.stringify(msg));
   }
   next();
 };
