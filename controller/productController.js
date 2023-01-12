@@ -129,6 +129,9 @@ const getProducts = asyncHandler(async (req, res) => {
       products = await Product.find()
         .sort({ overAllDiscount: "desc" })
         .populate("seller", "-password");
+    } else {
+      //fallback
+      products = await Product.find().populate("seller", "-password");
     }
   } else {
     products = await Product.find().populate("seller", "-password");
