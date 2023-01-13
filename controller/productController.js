@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Seller = require("../models/sellerModel");
 const Product = require("../models/productModel");
 const fs = require("fs");
+const Sorting = require("../controllerConfig/sorting");
 
 //Add prducts Method POST
 //@access private
@@ -113,26 +114,7 @@ const getProducts = asyncHandler(async (req, res) => {
       .limit(limit)
       .populate("seller", "-password");
   } else if (sort) {
-    if (sort === "new-arrivals") {
-      products = await Product.find()
-        .sort({ createdAt: "desc" })
-        .populate("seller", "-password");
-    } else if (sort === "high-to-low") {
-      products = await Product.find()
-        .sort({ discountedPrice: "desc" })
-        .populate("seller", "-password");
-    } else if (sort === "low-to-high") {
-      products = await Product.find()
-        .sort({ discountedPrice: "asc" })
-        .populate("seller", "-password");
-    } else if (sort === "discount") {
-      products = await Product.find()
-        .sort({ overAllDiscount: "desc" })
-        .populate("seller", "-password");
-    } else {
-      //fallback
-      products = await Product.find().populate("seller", "-password");
-    }
+    products = await Sorting(sort);
   } else {
     products = await Product.find().populate("seller", "-password");
   }
