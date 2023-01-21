@@ -29,8 +29,8 @@ const registerSeller = asyncHandler(async (req, res) => {
   //   service: "mail",
   //   secure: true, // true for 465, false for other ports
   //   auth: {
-  //     user: "meesho.query@mail.com", // generated ethereal user
-  //     pass: "Subha@123@meesho", // generated ethereal password
+  //     user: "", // generated ethereal user
+  //     pass: "", // generated ethereal password
   //   },
   //   logger: true,
   // });
