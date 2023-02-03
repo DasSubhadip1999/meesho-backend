@@ -17,7 +17,7 @@ const emailTemplate = (link) => {
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
     <!-- LOGO -->
     <tr>
-      <td bgcolor="#FFA73B" align="center">
+      <td bgcolor="#f43397" align="center">
         <table
           border="0"
           cellpadding="0"
@@ -36,7 +36,7 @@ const emailTemplate = (link) => {
       </td>
     </tr>
     <tr>
-      <td bgcolor="#FFA73B" align="center" style="padding: 0px 10px 0px 10px">
+      <td bgcolor="#f43397" align="center" style="padding: 0px 10px 0px 10px">
         <table
           border="0"
           cellpadding="0"
@@ -116,7 +116,7 @@ const emailTemplate = (link) => {
                         <td
                           align="center"
                           style="border-radius: 3px"
-                          bgcolor="#FFA73B"
+                          bgcolor="#f43397"
                         >
                           <a
                             href='${link}'
@@ -130,7 +130,7 @@ const emailTemplate = (link) => {
                               text-decoration: none;
                               padding: 15px 25px;
                               border-radius: 2px;
-                              border: 1px solid #ffa73b;
+                              border: 1px solid #f43397;
                               display: inline-block;
                             "
                             >Confirm Email</a
@@ -144,46 +144,7 @@ const emailTemplate = (link) => {
             </td>
           </tr>
           <!-- COPY -->
-          <tr>
-            <td
-              bgcolor="#ffffff"
-              align="left"
-              style="
-                padding: 0px 30px 0px 30px;
-                color: #666666;
-                font-family: 'Lato', Helvetica, Arial, sans-serif;
-                font-size: 18px;
-                font-weight: 400;
-                line-height: 25px;
-              "
-            >
-              <p style="margin: 0">
-                If that doesn't work, copy and paste the following link in your
-                browser:
-              </p>
-            </td>
-          </tr>
           <!-- COPY -->
-          <tr>
-            <td
-              bgcolor="#ffffff"
-              align="left"
-              style="
-                padding: 20px 30px 20px 30px;
-                color: #666666;
-                font-family: 'Lato', Helvetica, Arial, sans-serif;
-                font-size: 18px;
-                font-weight: 400;
-                line-height: 25px;
-              "
-            >
-              <p style="margin: 0">
-                <a href="#" target="_blank" style="color: #ffa73b"
-                  >https://ts.xx/sdfgd</a
-                >
-              </p>
-            </td>
-          </tr>
           <tr>
             <td
               bgcolor="#ffffff"
@@ -257,7 +218,7 @@ const emailTemplate = (link) => {
                 Need more help?
               </h2>
               <p style="margin: 0">
-                <a href="#" target="_blank" style="color: #ffa73b"
+                <a href="#" target="_blank" style="color: #f43397"
                   >We&rsquo;re here to help you out</a
                 >
               </p>

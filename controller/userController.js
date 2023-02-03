@@ -60,7 +60,8 @@ const registerUser = asyncHandler(async (req, res) => {
       email,
       token,
       isVerified,
-      message: "Verification mail send to your email id",
+      message:
+        "Verification email send to your email id and will expire in 5 minutes",
     });
   } else {
     res.status(400);
@@ -114,6 +115,14 @@ const confirmUserEmail = asyncHandler(async (req, res) => {
 
     const user = await User.findById(decode.id);
 
+    if (user.isVerified) {
+      res.status(200);
+      res.render("emailVerification.ejs", {
+        text: "Your email id is already verified",
+      });
+      return;
+    }
+
     if (!user) {
       res.status(400);
       throw new Error("Please check you token");
@@ -129,7 +138,9 @@ const confirmUserEmail = asyncHandler(async (req, res) => {
     }
 
     res.status(200);
-    res.render("emailVerification.ejs");
+    res.render("emailVerification.ejs", {
+      text: "Your email id is verified successfully",
+    });
   } catch (error) {
     res.status(400);
     throw new Error(error);
