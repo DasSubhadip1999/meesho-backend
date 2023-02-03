@@ -2,6 +2,7 @@ const express = require("express");
 const {
   registerUser,
   loginUser,
+  confirmUserEmail,
   addAddress,
   getAddress,
 } = require("../controller/userController");
@@ -57,5 +58,6 @@ userRouter
   );
 
 userRouter.route("/delivery-address/get").get(protectUser, getAddress);
+userRouter.route("/confirm-email/:token").get(confirmUserEmail);
 
 module.exports = userRouter;

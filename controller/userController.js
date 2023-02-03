@@ -3,6 +3,8 @@ const User = require("../models/userModel");
 const Address = require("../models/addressModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const sendMail = require("../asset/sendMail");
+const emailTemplate = require("../asset/emailTemplate");
 
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -32,13 +34,33 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    const { name, email, _id } = user;
+    const { name, email, _id, isVerified } = user;
+
+    let token = genToken(_id);
+
+    let subject = "Email Verification";
+
+    let text = "Please verify your email";
+
+    let link = `${process.env.BASE_URL}/api/users/confirm-email/${token}`;
+
+    let html = emailTemplate(link);
+
+    let emailResponse = sendMail(email, subject, text, html);
+
+    if (!emailResponse) {
+      res.status(500);
+      throw new Error("Something went wrong with sending verification email");
+    }
+
     res.status(201);
     res.json({
       id: _id,
       name,
       email,
-      token: genToken(_id),
+      token,
+      isVerified,
+      message: "Verification mail send to your email id",
     });
   } else {
     res.status(400);
@@ -59,22 +81,64 @@ const loginUser = asyncHandler(async (req, res) => {
   const userExists = await User.findOne({ email });
 
   if (userExists && (await bcrypt.compare(password, userExists.password))) {
-    const { name, email, _id } = userExists;
-    res.status(200).json({
-      id: _id,
-      name,
-      email,
-      token: genToken(_id),
-    });
+    const { name, email, _id, isVerified } = userExists;
+
+    if (isVerified) {
+      res.status(200).json({
+        id: _id,
+        name,
+        email,
+        token: genToken(_id),
+        isVerified,
+      });
+    } else {
+      res.status(400);
+      throw new Error("Please verify you email id");
+    }
   } else {
     res.status(400);
     throw new Error("Wrong email id or password");
   }
 });
 
+const confirmUserEmail = asyncHandler(async (req, res) => {
+  const { token } = req.params;
+
+  if (!token) {
+    res.status(400);
+    throw new Error("Token is not present");
+  }
+
+  try {
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await User.findById(decode.id);
+
+    if (!user) {
+      res.status(400);
+      throw new Error("Please check you token");
+    }
+
+    let data = await User.findByIdAndUpdate(user._id, {
+      $set: { isVerified: true },
+    });
+
+    if (!data) {
+      res.status(500);
+      throw new Error("Something went wrong in verification");
+    }
+
+    res.status(200);
+    res.render("emailVerification.ejs");
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  }
+});
+
 const genToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "30d",
+    expiresIn: "24h",
   });
 };
 
@@ -143,6 +207,7 @@ const getAddress = asyncHandler(async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
+  confirmUserEmail,
   addAddress,
   getAddress,
 };
