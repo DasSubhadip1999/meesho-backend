@@ -18,13 +18,11 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "dist")));
 
-app.use(accessControl);
-
 app.use("/api/sellers", require("./routes/sellerRouter"));
 app.use("/api/users", require("./routes/userRouter"));
 app.use("/api/products", require("./routes/productRouter"));
 app.use("/api/orders/my-orders", require("./routes/orderRouter"));
-
+app.use(accessControl);
 app.use(errorHandler);
 
 app.get("/", (req, res) => {
