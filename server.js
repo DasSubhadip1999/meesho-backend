@@ -10,6 +10,7 @@ const PORT = process.env.PORT;
 const app = express();
 connectDB();
 
+app.use(accessControl);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/uploads", express.static("uploads"));
@@ -22,7 +23,6 @@ app.use("/api/sellers", require("./routes/sellerRouter"));
 app.use("/api/users", require("./routes/userRouter"));
 app.use("/api/products", require("./routes/productRouter"));
 app.use("/api/orders/my-orders", require("./routes/orderRouter"));
-app.use(accessControl);
 app.use(errorHandler);
 
 app.get("/", (req, res) => {
