@@ -58,7 +58,6 @@ const registerUser = asyncHandler(async (req, res) => {
       id: _id,
       name,
       email,
-      token,
       isVerified,
       message:
         "Verification email send to your email id and will expire in 5 minutes",
